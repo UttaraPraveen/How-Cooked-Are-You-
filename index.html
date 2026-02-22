@@ -17,12 +17,12 @@
 <div class="blob blob-2"></div>
 
 <div class="main-wrapper">
-  <div class="hero-text">
+  <div class="hero-text fade-in-down">
     <h1>Academic<br>Wellness.</h1>
     <p>Just kidding. You're cooked.</p>
   </div>
 
-  <div class="glass-card" id="main-card">
+  <div class="glass-card float-anim" id="main-card">
     <div class="card-header">
       <div class="status-dot"></div>
       <span>Assessment Tool</span>
@@ -31,8 +31,8 @@
     <h2>Check Your Fate</h2>
     
     <div class="input-group">
-      <label>Student Name</label>
-      <input id="studentName" type="text" placeholder="e.g. Academic Victim" />
+      <label>Academic Victim Name</label>
+      <input id="studentName" type="text" placeholder="e.g. Procrastination King" />
       
       <div class="row">
         <div class="col">
@@ -64,32 +64,40 @@
   </div>
 
   <div id="result" class="result-card hidden">
-    </div>
-
-  <div id="actions" class="action-dock hidden">
-    <button id="copiumBtn" class="pill-btn purple hidden" onclick="takeCopium()">💊 Copium</button>
-    <button id="tombstoneBtn" class="pill-btn gray" onclick="generateTombstone()">🪦 Tombstone</button>
   </div>
 
-  <div id="tombstoneModal" class="modal-overlay hidden" onclick="closeTombstone(event)">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeTombstone(event)">×</button>
-    
-    <h2>Rest In Peace 🪦</h2>
-    <p>Press 'Download' to accept your fate.</p>
-    
-    <img id="tombstonePreview" src="" alt="Your Academic Tombstone" />
-    
-    <button class="primary-btn download-action" onclick="downloadImage()">
-      Download Image ⇩
-    </button>
+  <div id="actions" class="action-dock hidden">
+    <button id="copiumBtn" class="pill-btn purple hidden" onclick="takeCopium()">💊 Delulu Pill</button>
+    <button id="tombstoneBtn" class="pill-btn gray" onclick="generateTombstone()">🪦 Tombstone</button>
   </div>
 </div>
 
-<script src="script.js"></script>
-</body>
-</html>
+<div id="tombstoneModal" class="modal-overlay hidden" onclick="closeModal(event, 'tombstoneModal')">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal(event, 'tombstoneModal')">×</button>
+    <h2>Rest In Peace 🪦</h2>
+    <p>Press 'Download' to accept your fate.</p>
+    <img id="tombstonePreview" src="" alt="Your Academic Tombstone" />
+    <button class="primary-btn download-action" onclick="downloadImage()">Download Image ⇩</button>
+  </div>
+</div>
 
+<div id="deluluModal" class="modal-overlay hidden" onclick="closeModal(event, 'deluluModal')">
+    <div class="modal-content delulu-content">
+      <button class="close-btn" onclick="closeModal(event, 'deluluModal')">×</button>
+      
+      <div class="pill-icon">💊</div>
+      <h2>Prescription Received</h2>
+      <p class="patient-label">Patient: <span id="deluluPatient"></span></p>
+      
+      <div class="quote-box">
+          <p id="deluluQuote">"Quote goes here"</p>
+      </div>
+      
+      <button class="primary-btn download-action" onclick="closeModal(event, 'deluluModal')">
+        I Believe It ✨
+      </button>
+    </div>
 </div>
 
 <canvas id="tombstoneCanvas" width="400" height="500" style="display:none;"></canvas>

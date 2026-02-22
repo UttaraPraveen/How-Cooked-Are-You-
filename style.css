@@ -20,13 +20,36 @@ body {
   justify-content: center;
   align-items: center;
   overflow-x: hidden;
-  
-  /* The Grid Pattern */
   background-image: 
     linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
   background-size: 40px 40px;
 }
+
+/* --- Animations --- */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.float-anim { animation: float 6s ease-in-out infinite; }
+.fade-in-down { animation: fadeInDown 1s ease-out forwards; }
 
 /* --- Decorative Background Blobs --- */
 .blob {
@@ -39,14 +62,14 @@ body {
 .blob-1 {
   width: 500px;
   height: 500px;
-  background: #f3e8ff; /* Soft Purple */
+  background: #f3e8ff;
   top: -10%;
   right: -10%;
 }
 .blob-2 {
   width: 400px;
   height: 400px;
-  background: #ffedd5; /* Soft Peach */
+  background: #ffedd5;
   bottom: -10%;
   left: -10%;
 }
@@ -63,9 +86,9 @@ body {
 /* --- Typography --- */
 .hero-text {
   text-align: center;
-  margin-bottom: -40px; /* Overlap effect */
+  margin-bottom: -40px;
   z-index: 0;
-  opacity: 0.3; /* Subtle background text */
+  opacity: 0; /* Handled by animation */
   pointer-events: none;
 }
 .hero-text h1 {
@@ -93,11 +116,12 @@ body {
   width: 400px;
   box-shadow: var(--card-shadow);
   z-index: 2;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .glass-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
@@ -151,7 +175,7 @@ input {
   font-size: 1rem;
   font-weight: 500;
   color: var(--text-dark);
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 input:focus {
@@ -159,12 +183,10 @@ input:focus {
   background: #fff;
   border-color: var(--accent-purple);
   box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.1);
+  transform: translateY(-2px);
 }
 
-.row {
-  display: flex;
-  gap: 15px;
-}
+.row { display: flex; gap: 15px; }
 .col { flex: 1; }
 
 /* --- Buttons --- */
@@ -175,7 +197,7 @@ input:focus {
   background: var(--primary-black);
   color: white;
   border: none;
-  border-radius: 100px; /* Pill shape */
+  border-radius: 100px;
   font-family: var(--font-main);
   font-size: 1rem;
   font-weight: 600;
@@ -186,6 +208,19 @@ input:focus {
   padding-left: 30px;
   padding-right: 30px;
   transition: transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Button Shimmer Effect */
+.primary-btn::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 200%; height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255,255,255,0.1), transparent);
+  background-size: 50% 100%;
+  transition: opacity 0.3s;
+  opacity: 0;
 }
 
 .primary-btn:hover {
@@ -193,10 +228,15 @@ input:focus {
   box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
-/* --- Result Card (The floating purple card) --- */
+.primary-btn:hover::after {
+  opacity: 1;
+  animation: shimmer 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* --- Result Card --- */
 .result-card {
-  margin-top: -30px; /* Overlaps main card slightly */
-  margin-left: 250px; /* Floats to the right */
+  margin-top: -30px;
+  margin-left: 250px;
   background: linear-gradient(135deg, #a855f7, #ec4899);
   color: white;
   padding: 25px;
@@ -211,17 +251,13 @@ input:focus {
   border: 1px solid rgba(255,255,255,0.2);
 }
 
-@keyframes popIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.9); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
 /* --- Action Dock --- */
 .action-dock {
   display: flex;
   gap: 10px;
   margin-top: 40px;
   z-index: 2;
+  animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 .pill-btn {
@@ -231,47 +267,29 @@ input:focus {
   font-weight: 600;
   font-family: var(--font-main);
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.2s;
 }
 
-.pill-btn:hover { transform: translateY(-2px); }
+.pill-btn:hover { transform: translateY(-3px) scale(1.05); }
 
 .pill-btn.purple {
   background: #f3e8ff;
   color: #7e22ce;
+  border: 1px solid #d8b4fe;
 }
 
 .pill-btn.gray {
   background: #f1f5f9;
   color: #475569;
+  border: 1px solid #e2e8f0;
 }
 
-.hidden { display: none !important; }
-
-/* Responsive adjustments */
-@media (max-width: 800px) {
-  .hero-text h1 { font-size: 3rem; margin-top: 40px; }
-  .result-card { 
-    position: relative; 
-    margin: 20px 0 0 0; 
-    right: auto; 
-    bottom: auto;
-    width: 100%;
-  }
-  .glass-card { width: 90%; }
-}
-
-/* ... Keep all your previous CSS ... */
-
-/* --- NEW: Modal Styles --- */
+/* --- Modals --- */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 23, 42, 0.6); /* Dark semi-transparent background */
-  backdrop-filter: blur(8px); /* Blur the website behind it */
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
   z-index: 1000;
   display: flex;
   justify-content: center;
@@ -290,19 +308,42 @@ input:focus {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   position: relative;
   transform: scale(0.9);
-  animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-.modal-content h2 {
-  font-size: 1.8rem;
-  margin-bottom: 5px;
-  color: #1e293b;
+/* DELULU SPECIFIC STYLES */
+.delulu-content {
+  background: linear-gradient(135deg, #fff0f7, #fff);
+  border: 2px solid #fbcfe8;
 }
 
-.modal-content p {
-  color: #64748b;
-  margin-bottom: 20px;
-  font-size: 0.9rem;
+.pill-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.quote-box {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  margin: 20px 0;
+  border: 1px solid #f3e8ff;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.05);
+}
+
+.patient-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 1px;
+  margin-top: -10px;
+}
+
+#deluluQuote {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #4c1d95;
 }
 
 .modal-content img {
@@ -315,27 +356,22 @@ input:focus {
 
 .close-btn {
   position: absolute;
-  top: 15px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: #94a3b8;
-  cursor: pointer;
-  line-height: 1;
+  top: 15px; right: 20px;
+  background: none; border: none;
+  font-size: 2rem; color: #94a3b8;
+  cursor: pointer; line-height: 1;
 }
-
 .close-btn:hover { color: #f43f5e; }
 
-.download-action {
-  margin-top: 0; /* Override default margin */
-  justify-content: center; /* Center text */
-  background: #0f172a;
-}
+.download-action { margin-top: 0; justify-content: center; background: #0f172a; }
+.hidden { display: none !important; }
 
 /* Animations */
 @keyframes fadeIn { to { opacity: 1; } }
-@keyframes zoomIn { to { transform: scale(1); } }
 
-/* Utility to hide/show */
-.hidden { display: none !important; }
+/* Responsive */
+@media (max-width: 800px) {
+  .hero-text h1 { font-size: 3rem; margin-top: 40px; }
+  .result-card { position: relative; margin: 20px 0; right: auto; bottom: auto; width: 100%; }
+  .glass-card { width: 90%; }
+}
