@@ -1,184 +1,316 @@
-const ROASTS = [
-    "Bro opened the syllabus for the first time today.",
-    "Your delusion level is carrying your GPA.",
-    "Sleep schedule has officially left the chat.",
-    "Academic comeback loading… please wait 3-5 business days.",
-    "You and the syllabus are currently strangers.",
-    "This is not studying. This is character development.",
-    "The exam fears you. (This may be false.)",
-    "God is watching, and He is confused."
-];
+// ============ DATA ============
+const ROASTS = {
+  ultraChill: [
+    "You're built different. Genuinely concerningly prepared.",
+    "Please go outside. You've earned it.",
+    "Top of the class behavior. Suspicious, even.",
+    "Are you a robot? Only a robot would be this ready.",
+    "You studied. You slept. You ate. Who ARE you?",
+  ],
+  chill: [
+    "You're fine. Annoyingly fine.",
+    "Mild concern detected. Nothing a nap can't fix.",
+    "Light prep, steady vibes. The chad energy is real.",
+    "You're in the 'probably won't fail' category. Congrats.",
+  ],
+  medium: [
+    "The syllabus opened, panicked, and closed again.",
+    "You're at the 'cramming is still possible' stage. Act now.",
+    "Medium rare. Needs more time in the oven.",
+    "You're coasting. The cliff is closer than it looks.",
+    "Procrastination is doing its best work on you.",
+    "The vibe is: 'I'll start at 9pm'. It's 11pm. You lied.",
+  ],
+  highlyCooked: [
+    "Bro opened the syllabus for the first time today. Classic.",
+    "Your GPA just filed a missing person report.",
+    "Sleep schedule has left the chat. It's not coming back.",
+    "Academic comeback loading… ETA: never.",
+    "The exam is not scared of you. You should be scared of the exam.",
+    "You: 'I work better under pressure.' The pressure: 'lol no.'",
+    "God is watching. He is logging off.",
+    "You've transitioned from student to content creator (of panic).",
+  ],
+  burnt: [
+    "CONGRATULATIONS. You have unlocked the void.",
+    "You aren't cooked. You are CHARCOAL.",
+    "At 0% syllabus, your strategy is to BECOME the exam.",
+    "Even your delusion can't save you. That takes talent.",
+    "A moment of silence for the career that could have been. 🕯️",
+    "You didn't burn your ships. You burned your notes, the ship, the harbor, and yourself.",
+    "This level of cooked is studied in academic disaster case files.",
+  ]
+};
 
 const COPIUM_QUOTES = [
-    "Bill Gates dropped out and look at him now.",
-    "Marks are just a number. Jail is just a room.",
-    "Academic comeback starts at 3 AM. Trust the process.",
-    "The sun will still rise even if you fail (probably).",
-    "C's get degrees. D's get... diplomas?",
-    "Einstein failed math. (He didn't, but let's pretend).",
-    "You're not failing, you're just pivoting to a new career path."
+  "Bill Gates dropped out. Look at him now. (You are not Bill Gates.)",
+  "Marks are just a number. Jail is also just a building.",
+  "Your comeback arc starts tonight at 3 AM. Trust the process.",
+  "C's get degrees. D's get... life experience.",
+  "The exam can smell fear. Stop giving it power.",
+  "You're not failing. You're on a nonlinear success trajectory.",
+  "Every 'F' is just an 'A' that hasn't been graded yet. (That's not how it works.)",
+  "The universe rewards those who nap boldly.",
+  "10 years from now this won't matter. (It will definitely matter tomorrow.)",
 ];
 
-let currentCookedLevel = 0; 
-let studentNameGlobal = "Academic Victim"; // Default name
+let currentCookedLevel = 0;
+let studentNameGlobal = "Academic Victim";
 
+// ============ UTILS ============
+function clamp(val, min, max) { return Math.min(max, Math.max(min, val)); }
+
+// ============ CALCULATE ============
 function calculate() {
-    // 1. Get Inputs
-    const nameInput = document.getElementById("studentName").value;
-    studentNameGlobal = nameInput ? nameInput : "Academic Victim";
-    
-    let syllabus = Number(document.getElementById("syllabus").value);
-    let days = Number(document.getElementById("days").value);
-    let sleep = Number(document.getElementById("sleep").value);
-    let delusion = Number(document.getElementById("delusion").value);
+  const nameInput = document.getElementById("studentName").value.trim();
+  studentNameGlobal = nameInput || "Academic Victim";
 
-    // Sanity Checks
-    if (syllabus < 0) syllabus = 0;
-    if (syllabus > 100) syllabus = 100;
-    if (days < 0) days = 0;
-    if (sleep < 0) sleep = 0;
+  let syllabus = clamp(Number(document.getElementById("syllabus").value) || 0, 0, 100);
+  let days     = Math.max(Number(document.getElementById("days").value) || 0, 0);
+  let sleep    = clamp(Number(document.getElementById("sleep").value) || 7, 0, 24);
+  let delusion = clamp(Number(document.getElementById("delusion").value) || 5, 1, 10);
 
-    // ================= THE ALGORITHM =================
-    let baseCooked = 100 - syllabus;
-    let timeMultiplier = 1;
-    
-    if (days <= 1) timeMultiplier = 2.5;
-    else if (days <= 3) timeMultiplier = 1.8;
-    else if (days <= 7) timeMultiplier = 1.2;
-    else if (days > 30) timeMultiplier = 0.5;
+  // --- Algorithm ---
+  let baseCooked = 100 - syllabus;
 
-    let cookedScore = baseCooked * timeMultiplier;
+  let timeMult = 1;
+  if (days === 0)       timeMult = 3.0;
+  else if (days <= 1)   timeMult = 2.5;
+  else if (days <= 3)   timeMult = 1.8;
+  else if (days <= 7)   timeMult = 1.2;
+  else if (days > 30)   timeMult = 0.5;
 
-    if (sleep < 6) cookedScore += (6 - sleep) * 5;
-    if (delusion > 5 && syllabus < 50) cookedScore += delusion * 2;
+  let score = baseCooked * timeMult;
 
-    let displayScore = Math.min(100, Math.max(0, Math.round(cookedScore)));
-    currentCookedLevel = displayScore;
+  if (sleep < 5)       score += (5 - sleep) * 8;
+  else if (sleep < 6)  score += (6 - sleep) * 4;
 
-    // ================= UI UPDATES =================
-    const resultDiv = document.getElementById("result");
-    const actionsDiv = document.getElementById("actions");
-    const copiumBtn = document.getElementById("copiumBtn");
-    
-    resultDiv.classList.remove("hidden");
-    actionsDiv.classList.remove("hidden");
+  if (delusion > 6 && syllabus < 50) score += (delusion - 5) * 3;
+  if (delusion === 10 && syllabus < 20) score += 15;
 
-    // Delulu Button Logic (>80%)
-    if (displayScore > 80) {
-        copiumBtn.classList.remove("hidden");
-    } else {
-        copiumBtn.classList.add("hidden");
-    }
+  const displayScore = Math.min(100, Math.max(0, Math.round(score)));
+  currentCookedLevel = displayScore;
 
-    const roast = ROASTS[Math.floor(Math.random() * ROASTS.length)];
-    let icon = "🔥";
-    if (displayScore < 30) icon = "🧊";
-    if (displayScore > 85) icon = "💀";
-
-    resultDiv.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-            <span style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;">
-                ${getVerdict(displayScore).split('.')[0]}
-            </span>
-            <span style="font-size: 1.5rem;">${icon}</span>
-        </div>
-        
-        <h1 style="font-size: 3.5rem; margin: 0; line-height: 1;">${displayScore}%</h1>
-        <p style="opacity: 0.9; font-size: 0.9rem; margin-top: 5px;">Cooked Level</p>
-        
-        <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;">
-            <p style="font-size: 0.9rem; font-style: italic;">"${roast}"</p>
-        </div>
-    `;
+  updateUI(displayScore, syllabus, days, sleep);
 }
 
-// === DELULU PILL FUNCTION ===
+function updateUI(displayScore, syllabus, days, sleep) {
+  // --- Roast selection based on score ---
+  let roastPool;
+  if (displayScore < 15)       roastPool = ROASTS.ultraChill;
+  else if (displayScore < 35) roastPool = ROASTS.chill;
+  else if (displayScore < 60) roastPool = ROASTS.medium;
+  else if (displayScore < 82) roastPool = ROASTS.highlyCooked;
+  else                        roastPool = ROASTS.burnt;
+
+  const roast = roastPool[Math.floor(Math.random() * roastPool.length)];
+  const verdict = getVerdict(displayScore);
+
+  // --- Color scheme ---
+  let color, bgColor;
+  if (displayScore < 20)      { color = '#00ff88'; bgColor = 'rgba(0,255,136,0.1)'; }
+  else if (displayScore < 45) { color = '#ffb800'; bgColor = 'rgba(255,184,0,0.1)'; }
+  else if (displayScore < 70) { color = '#ff8c00'; bgColor = 'rgba(255,140,0,0.1)'; }
+  else if (displayScore < 85) { color = '#ff4d00'; bgColor = 'rgba(255,77,0,0.1)'; }
+  else                        { color = '#ff3366'; bgColor = 'rgba(255,51,102,0.1)'; }
+
+  // --- Update UI Elements ---
+  document.getElementById("placeholder").style.display = "none";
+
+  const resultContent = document.getElementById("resultContent");
+  resultContent.classList.add("visible");
+
+  const scoreEl = document.getElementById("scoreDisplay");
+  scoreEl.style.color = color;
+  scoreEl.innerHTML = `${displayScore}<span class="score-unit">%</span>`;
+  scoreEl.style.animation = 'scoreReveal 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both';
+  setTimeout(() => { scoreEl.style.animation = ''; }, 500);
+
+  const fill = document.getElementById("flameFill");
+  fill.style.width = '0%';
+  fill.style.background = `linear-gradient(to right, #ffb800, ${color})`;
+  setTimeout(() => { fill.style.width = displayScore + '%'; }, 100);
+
+  const badge = document.getElementById("verdictBadge");
+  badge.textContent = verdict.label;
+  badge.style.background = bgColor;
+  badge.style.color = color;
+  badge.style.border = `1px solid ${color}44`;
+
+  document.getElementById("roastText").innerHTML = `"${roast}"`;
+
+  // Actions
+  const actions = document.getElementById("actions");
+  actions.classList.add("visible");
+
+  const copiumBtn = document.getElementById("copiumBtn");
+  if (displayScore > 75) copiumBtn.classList.remove("hidden");
+  else copiumBtn.classList.add("hidden");
+
+  // Stats strip
+  updateStats(displayScore, syllabus, days, sleep);
+}
+
+function updateStats(score, syllabus, days, sleep) {
+  const strip = document.getElementById("statsStrip");
+  strip.style.display = 'grid';
+  strip.style.animation = 'fadeUp 0.5s 0.2s ease both';
+
+  const survival = Math.max(0, Math.round(100 - score * 0.85));
+  const grades = ['A+','A','B+','B','C+','C','D','F','F-'];
+  const gradeIdx = Math.min(8, Math.floor(score / 12));
+  const copeLevel = score > 80 ? 'MAX' : score > 50 ? 'HIGH' : score > 25 ? 'MED' : 'LOW';
+  const prayers = score > 85 ? '∞' : score > 60 ? '1000+' : score > 30 ? '100' : '12';
+
+  document.getElementById("statSurvival").textContent = survival + '%';
+  document.getElementById("statGrade").textContent = grades[gradeIdx];
+  document.getElementById("statCope").textContent = copeLevel;
+  document.getElementById("statPrayer").textContent = prayers;
+}
+
+// ============ VERDICTS ============
+function getVerdict(score) {
+  if (score < 10)  return { label: '✅ Not Cooked' };
+  if (score < 25)  return { label: '🧊 Chilling Dangerously' };
+  if (score < 45)  return { label: '⚠️ Mildly Crispy' };
+  if (score < 65)  return { label: '🔥 Medium Rare' };
+  if (score < 82)  return { label: '💀 Well Done' };
+  return                  { label: '☠️ BURNT TOAST' };
+}
+
+// ============ DELULU PILL ============
 function takeCopium() {
-    const dose = COPIUM_QUOTES[Math.floor(Math.random() * COPIUM_QUOTES.length)];
-    
-    // Set content
-    document.getElementById("deluluPatient").innerText = studentNameGlobal;
-    document.getElementById("deluluQuote").innerText = dose;
-    
-    // Show Modal
-    const modal = document.getElementById("deluluModal");
-    modal.classList.remove("hidden");
+  const dose = COPIUM_QUOTES[Math.floor(Math.random() * COPIUM_QUOTES.length)];
+  document.getElementById("deluluPatient").textContent = studentNameGlobal;
+  document.getElementById("deluluQuote").textContent = dose;
+  
+  const modal = document.getElementById("deluluModal");
+  modal.classList.remove("hidden");
+  modal.classList.add("open");
 }
 
-// === TOMBSTONE FUNCTION ===
+// ============ TOMBSTONE ============
 function generateTombstone() {
-    const canvas = document.getElementById("tombstoneCanvas");
-    const ctx = canvas.getContext("2d");
-    const name = studentNameGlobal;
-    
-    ctx.fillStyle = "#1e293b";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const canvas = document.getElementById("tombstoneCanvas");
+  const ctx = canvas.getContext("2d");
+  const name = studentNameGlobal;
+  const W = canvas.width, H = canvas.height;
 
-    ctx.fillStyle = "#64748b";
-    ctx.beginPath();
-    ctx.arc(200, 150, 140, Math.PI, 0); 
-    ctx.lineTo(340, 500); 
-    ctx.lineTo(60, 500); 
-    ctx.lineTo(60, 150); 
-    ctx.fill();
+  // Background (Dark Theme)
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+  bgGrad.addColorStop(0, '#0d0d0d');
+  bgGrad.addColorStop(1, '#1a0a00');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
 
-    ctx.strokeStyle = "#334155";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(100, 100);
-    ctx.lineTo(130, 140);
-    ctx.stroke();
+  // Stone
+  const stoneGrad = ctx.createLinearGradient(0, 60, 0, H - 30);
+  stoneGrad.addColorStop(0, '#4a4a4a');
+  stoneGrad.addColorStop(1, '#2a2a2a');
+  ctx.fillStyle = stoneGrad;
+  ctx.beginPath();
+  ctx.arc(W/2, 180, 150, Math.PI, 0);
+  ctx.lineTo(W - 60, H - 40);
+  ctx.lineTo(60, H - 40);
+  ctx.closePath();
+  ctx.fill();
 
-    ctx.fillStyle = "#0f172a";
-    ctx.textAlign = "center";
-    ctx.font = "bold 40px Courier New";
-    ctx.fillText("R.I.P", 200, 110);
-    ctx.font = "bold 30px Courier New";
-    ctx.fillText(name.toUpperCase().substring(0, 12), 200, 180);
+  // Stone edge highlight
+  ctx.strokeStyle = '#666';
+  ctx.lineWidth = 2;
+  ctx.stroke();
 
-    const today = new Date().toLocaleDateString();
-    ctx.font = "20px Courier New";
-    ctx.fillText(`Date: ${today}`, 200, 220);
+  // Inner shadow on stone
+  ctx.strokeStyle = '#1a1a1a';
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.arc(W/2, 180, 142, Math.PI, 0);
+  ctx.stroke();
 
-    ctx.beginPath(); ctx.moveTo(100, 240); ctx.lineTo(300, 240); ctx.stroke();
+  // Ground
+  const groundGrad = ctx.createLinearGradient(0, H - 50, 0, H);
+  groundGrad.addColorStop(0, '#2d1a00');
+  groundGrad.addColorStop(1, '#1a0d00');
+  ctx.fillStyle = groundGrad;
+  ctx.fillRect(0, H - 50, W, 50);
 
-    ctx.font = "italic 18px Courier New";
-    ctx.fillText("Cause of Death:", 200, 280);
-    
-    let cause = "Academic Victim";
-    if (currentCookedLevel >= 90) cause = "0% Syllabus, 100% Hope";
-    else if (currentCookedLevel >= 70) cause = "Procrastination Overdose";
-    else if (currentCookedLevel < 30) cause = "Died of Boredom (Topper)";
+  // R.I.P Text
+  ctx.textAlign = "center";
+  ctx.shadowColor = 'rgba(0,0,0,0.8)';
+  ctx.shadowBlur = 8;
 
-    ctx.font = "bold 19px Courier New";
-    ctx.fillText(cause, 200, 310);
-    ctx.font = "16px Courier New";
-    ctx.fillText(`Cooked Level: ${currentCookedLevel}%`, 200, 450);
+  ctx.font = "bold 42px 'Courier New'";
+  ctx.fillStyle = '#ff4d00';
+  ctx.fillText("R.I.P", W/2, 115);
 
-    const modal = document.getElementById("tombstoneModal");
-    document.getElementById("tombstonePreview").src = canvas.toDataURL();
-    modal.classList.remove("hidden");
+  ctx.font = "bold 22px 'Courier New'";
+  ctx.fillStyle = '#e0e0e0';
+  ctx.fillText(name.toUpperCase().substring(0, 14), W/2, 175);
+
+  ctx.font = "16px 'Courier New'";
+  ctx.fillStyle = '#999';
+  const today = new Date().toLocaleDateString('en-GB');
+  ctx.fillText(today, W/2, 210);
+
+  // Divider
+  ctx.strokeStyle = '#555';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(90, 228);
+  ctx.lineTo(310, 228);
+  ctx.stroke();
+
+  ctx.font = "italic 15px 'Courier New'";
+  ctx.fillStyle = '#aaa';
+  ctx.fillText("Cause of Death:", W/2, 260);
+
+  let cause = "Academic Negligence";
+  if       (currentCookedLevel >= 95) cause = "0% Syllabus, 100% Cope";
+  else if (currentCookedLevel >= 85) cause = "Procrastination Overdose";
+  else if (currentCookedLevel >= 70) cause = "Delusional Optimism";
+  else if (currentCookedLevel >= 50) cause = "Peak Mid-Semester Chaos";
+  else if (currentCookedLevel < 20)  cause = "Studied Too Hard (Sad)";
+
+  ctx.font = "bold 16px 'Courier New'";
+  ctx.fillStyle = '#ff8c00';
+  ctx.fillText(cause, W/2, 290);
+
+  // Flame emoji area
+  ctx.font = "30px serif";
+  ctx.fillText("🔥", W/2, 360);
+
+  ctx.font = "bold 15px 'Courier New'";
+  ctx.fillStyle = '#ff4d00';
+  ctx.fillText(`COOKED: ${currentCookedLevel}%`, W/2, 400);
+
+  ctx.font = "12px 'Courier New'";
+  ctx.fillStyle = '#555';
+  ctx.fillText("cooked.exe v2.0", W/2, 460);
+
+  ctx.shadowBlur = 0;
+
+  // Show Modal
+  document.getElementById("tombstonePreview").src = canvas.toDataURL();
+  const modal = document.getElementById("tombstoneModal");
+  modal.classList.remove("hidden");
+  modal.classList.add("open");
 }
 
 function downloadImage() {
-    const canvas = document.getElementById("tombstoneCanvas");
-    const link = document.createElement('a');
-    link.download = `RIP-${studentNameGlobal}.png`;
-    link.href = canvas.toDataURL();
-    link.click();
+  const canvas = document.getElementById("tombstoneCanvas");
+  const link = document.createElement('a');
+  link.download = `RIP-${studentNameGlobal.replace(/\s+/g,'-')}.png`;
+  link.href = canvas.toDataURL();
+  link.click();
 }
 
-// === SHARED CLOSE MODAL FUNCTION ===
-function closeModal(event, modalId) {
-    if (event.target.id === modalId || event.target.className === "close-btn" || event.target.classList.contains("download-action")) {
-        document.getElementById(modalId).classList.add("hidden");
-    }
+// ============ MODALS ============
+function closeModal(id) {
+  const el = document.getElementById(id);
+  el.classList.add("hidden");
+  el.classList.remove("open");
 }
 
-function getVerdict(score) {
-    if (score < 10) return "You are the danger. Go sleep.";
-    if (score < 30) return "You’re chilling. Suspiciously calm.";
-    if (score < 60) return "Medium Rare. Stress is kicking in.";
-    if (score < 85) return "Deep Fried. Start praying.";
-    return "CONGRATULATIONS. You are burnt toast.";
+function handleOverlayClick(e, id) {
+  if (e.target.id === id) closeModal(id);
 }
