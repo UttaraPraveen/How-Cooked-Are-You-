@@ -9,21 +9,30 @@
 <body>
 
 <div class="container" id="main-card">
-  <h1> How Cooked Are You?</h1>
+  <h1>🔥 How Cooked Are You?</h1>
   <p class="subtitle">Enter your stats to reveal your fate</p>
 
   <div class="input-group">
+    <input id="studentName" type="text" placeholder="Your Name (For the Obituary)" />
+    
     <input id="syllabus" type="number" placeholder="Syllabus Done %" max="100" />
     <input id="days" type="number" placeholder="Days Left" />
     <input id="sleep" type="number" placeholder="Sleep Hours" />
     <input id="delusion" type="number" placeholder="Delusion Level (1-10)" />
   </div>
 
-  <button onclick="calculate()">Calculate My Fate</button>
+  <button class="calculate-btn" onclick="calculate()">Calculate My Fate</button>
 
   <div id="result" class="hidden">
     </div>
+
+  <div id="actions" class="hidden">
+    <button id="copiumBtn" class="action-btn copium hidden" onclick="takeCopium()">💊 INHALE COPIUM</button>
+    <button id="tombstoneBtn" class="action-btn tombstone" onclick="generateTombstone()">🪦 MINT TOMBSTONE</button>
+  </div>
 </div>
+
+<canvas id="tombstoneCanvas" width="400" height="500" style="display:none;"></canvas>
 
 <script src="script.js"></script>
 </body>
