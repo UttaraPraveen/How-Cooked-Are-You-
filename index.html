@@ -4,32 +4,92 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How Cooked Are You? 🔥</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container" id="main-card">
-  <h1>🔥 How Cooked Are You?</h1>
-  <p class="subtitle">Enter your stats to reveal your fate</p>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
 
-  <div class="input-group">
-    <input id="studentName" type="text" placeholder="Your Name (For the Obituary)" />
-    
-    <input id="syllabus" type="number" placeholder="Syllabus Done %" max="100" />
-    <input id="days" type="number" placeholder="Days Left" />
-    <input id="sleep" type="number" placeholder="Sleep Hours" />
-    <input id="delusion" type="number" placeholder="Delusion Level (1-10)" />
+<div class="main-wrapper">
+  <div class="hero-text">
+    <h1>Academic<br>Wellness.</h1>
+    <p>Just kidding. You're cooked.</p>
   </div>
 
-  <button class="calculate-btn" onclick="calculate()">Calculate My Fate</button>
-
-  <div id="result" class="hidden">
+  <div class="glass-card" id="main-card">
+    <div class="card-header">
+      <div class="status-dot"></div>
+      <span>Assessment Tool</span>
     </div>
 
-  <div id="actions" class="hidden">
-    <button id="copiumBtn" class="action-btn copium hidden" onclick="takeCopium()">💊 INHALE COPIUM</button>
-    <button id="tombstoneBtn" class="action-btn tombstone" onclick="generateTombstone()">🪦 MINT TOMBSTONE</button>
+    <h2>Check Your Fate</h2>
+    
+    <div class="input-group">
+      <label>Student Name</label>
+      <input id="studentName" type="text" placeholder="e.g. Academic Victim" />
+      
+      <div class="row">
+        <div class="col">
+          <label>Syllabus %</label>
+          <input id="syllabus" type="number" placeholder="0 - 100" />
+        </div>
+        <div class="col">
+          <label>Days Left</label>
+          <input id="days" type="number" placeholder="Days" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Sleep (Hrs)</label>
+          <input id="sleep" type="number" placeholder="Hours" />
+        </div>
+        <div class="col">
+          <label>Delusion (1-10)</label>
+          <input id="delusion" type="number" placeholder="Level" />
+        </div>
+      </div>
+    </div>
+
+    <button class="primary-btn" onclick="calculate()">
+      Generate Verdict 
+      <span class="arrow">→</span>
+    </button>
   </div>
+
+  <div id="result" class="result-card hidden">
+    </div>
+
+  <div id="actions" class="action-dock hidden">
+    <button id="copiumBtn" class="pill-btn purple hidden" onclick="takeCopium()">💊 Copium</button>
+    <button id="tombstoneBtn" class="pill-btn gray" onclick="generateTombstone()">🪦 Tombstone</button>
+  </div>
+
+  <div id="tombstoneModal" class="modal-overlay hidden" onclick="closeTombstone(event)">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeTombstone(event)">×</button>
+    
+    <h2>Rest In Peace 🪦</h2>
+    <p>Press 'Download' to accept your fate.</p>
+    
+    <img id="tombstonePreview" src="" alt="Your Academic Tombstone" />
+    
+    <button class="primary-btn download-action" onclick="downloadImage()">
+      Download Image ⇩
+    </button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
 </div>
 
 <canvas id="tombstoneCanvas" width="400" height="500" style="display:none;"></canvas>

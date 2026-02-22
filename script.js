@@ -106,11 +106,31 @@ function calculate() {
 
     const roast = ROASTS[Math.floor(Math.random() * ROASTS.length)];
 
+    // ... inside calculate() function ...
+
+    // Dynamic Icon based on score
+    let icon = "🔥";
+    if (displayScore < 30) icon = "🧊";
+    if (displayScore > 85) icon = "💀";
+
+    // Injecting into the Purple Result Card
     resultDiv.innerHTML = `
-        <h2 style="color: ${color}; font-size: 2.5rem; margin: 10px 0;">${displayScore}% Cooked 💀</h2>
-        <p style="font-size: 1.1rem;"><strong>Verdict:</strong> ${getVerdict(displayScore)}</p>
-        <p style="color: #cbd5e1; font-style: italic;">"${roast}"</p>
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+            <span style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;">
+                ${getVerdict(displayScore).split('.')[0]}
+            </span>
+            <span style="font-size: 1.5rem;">${icon}</span>
+        </div>
+        
+        <h1 style="font-size: 3.5rem; margin: 0; line-height: 1;">${displayScore}%</h1>
+        <p style="opacity: 0.9; font-size: 0.9rem; margin-top: 5px;">Cooked Level</p>
+        
+        <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;">
+            <p style="font-size: 0.9rem; font-style: italic;">"${roast}"</p>
+        </div>
     `;
+
+    // ... rest of the code ...
 }
 
 // === BUTTON FUNCTIONS ===
@@ -121,16 +141,19 @@ function takeCopium() {
     alert(`💊 PRESCRIBED DOSE FOR ${studentNameGlobal.toUpperCase()}:\n\n"${dose}"`);
 }
 
+// ... Keep previous variables and calculate() function ...
+
+// === MODIFIED: Show Modal instead of Download ===
 function generateTombstone() {
     const canvas = document.getElementById("tombstoneCanvas");
     const ctx = canvas.getContext("2d");
-    const name = studentNameGlobal;
+    const name = studentNameGlobal || "Bro"; // Use the global name variable
     
-    // Draw Background
+    // 1. Draw Background (Same logic as before)
     ctx.fillStyle = "#1e293b";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw Stone
+    // 2. Draw Stone
     ctx.fillStyle = "#64748b";
     ctx.beginPath();
     ctx.arc(200, 150, 140, Math.PI, 0); 
@@ -139,7 +162,7 @@ function generateTombstone() {
     ctx.lineTo(60, 150); 
     ctx.fill();
 
-    // Cracks in stone (Visual flair)
+    // Cracks
     ctx.strokeStyle = "#334155";
     ctx.lineWidth = 3;
     ctx.beginPath();
@@ -147,7 +170,7 @@ function generateTombstone() {
     ctx.lineTo(130, 140);
     ctx.stroke();
 
-    // Text Settings
+    // Text
     ctx.fillStyle = "#0f172a";
     ctx.textAlign = "center";
     
@@ -169,7 +192,7 @@ function generateTombstone() {
     ctx.font = "italic 18px Courier New";
     ctx.fillText("Cause of Death:", 200, 280);
     
-    // Dynamic Cause of Death
+    // Dynamic Cause
     let cause = "Academic Victim";
     if (currentCookedLevel >= 90) cause = "0% Syllabus, 100% Hope";
     else if (currentCookedLevel >= 70) cause = "Procrastination Overdose";
@@ -181,11 +204,32 @@ function generateTombstone() {
     ctx.font = "16px Courier New";
     ctx.fillText(`Cooked Level: ${currentCookedLevel}%`, 200, 450);
 
-    // Download
+    // --- NEW LOGIC: SHOW MODAL ---
+    const modal = document.getElementById("tombstoneModal");
+    const imgPreview = document.getElementById("tombstonePreview");
+    
+    // Convert Canvas to Image URL and set it to the <img> tag
+    imgPreview.src = canvas.toDataURL();
+    
+    // Show the modal
+    modal.classList.remove("hidden");
+}
+
+// === NEW: Download Function ===
+function downloadImage() {
+    const canvas = document.getElementById("tombstoneCanvas");
     const link = document.createElement('a');
-    link.download = `RIP-${name}.png`;
+    link.download = `RIP-${studentNameGlobal}.png`;
     link.href = canvas.toDataURL();
     link.click();
+}
+
+// === NEW: Close Modal Function ===
+function closeTombstone(event) {
+    // Close if clicked on 'x' or the background overlay (but not the card itself)
+    if (event.target.id === "tombstoneModal" || event.target.className === "close-btn") {
+        document.getElementById("tombstoneModal").classList.add("hidden");
+    }
 }
 
 function getVerdict(score) {
