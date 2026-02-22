@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,32 +16,37 @@
 <div class="page">
 
   <header class="site-header">
-    <div class="logo">COOKED.exe</div>
-    <div class="live-badge">
-      <div class="live-dot"></div>
-      ACADEMIC CRISIS DETECTOR
+    <div class="header-left">
+      <div class="logo">COOKED.exe</div>
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <span>v2.4 ONLINE</span>
+      </div>
     </div>
+    
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+      <span class="sun-icon">☀&#xFE0E;</span>
+      <span class="moon-icon">☾</span>
+    </button>
   </header>
 
   <div class="ticker-wrap">
     <div class="ticker-track">
-      <span class="ticker-item">SYLLABUS STATUS: <span class="ticker-accent">CRITICAL</span></span>
-      <span class="ticker-item">SLEEP DEPT: <span class="ticker-accent">MAXIMUM</span></span>
-      <span class="ticker-item">COPE LEVEL: <span class="ticker-accent">ASTRONOMICAL</span></span>
-      <span class="ticker-item">DELUSION: <span class="ticker-accent">ENABLED</span></span>
+      <span class="ticker-item">SYLLABUS: <span class="ticker-accent">CRITICAL</span></span>
+      <span class="ticker-item">SLEEP: <span class="ticker-accent">404 NOT FOUND</span></span>
+      <span class="ticker-item">COPE: <span class="ticker-accent">MAXIMUM</span></span>
+      <span class="ticker-item">DELUSION: <span class="ticker-accent">OPTIMAL</span></span>
       <span class="ticker-item">EXAM: <span class="ticker-accent">INCOMING</span></span>
-      <span class="ticker-item">PRAYERS SENT: <span class="ticker-accent">UNANSWERED</span></span>
-       <span class="ticker-item">SYLLABUS STATUS: <span class="ticker-accent">CRITICAL</span></span>
-      <span class="ticker-item">SLEEP DEPT: <span class="ticker-accent">MAXIMUM</span></span>
-      <span class="ticker-item">COPE LEVEL: <span class="ticker-accent">ASTRONOMICAL</span></span>
-      <span class="ticker-item">DELUSION: <span class="ticker-accent">ENABLED</span></span>
+      <span class="ticker-item">SYLLABUS: <span class="ticker-accent">CRITICAL</span></span>
+      <span class="ticker-item">SLEEP: <span class="ticker-accent">404 NOT FOUND</span></span>
+      <span class="ticker-item">COPE: <span class="ticker-accent">MAXIMUM</span></span>
+      <span class="ticker-item">DELUSION: <span class="ticker-accent">OPTIMAL</span></span>
       <span class="ticker-item">EXAM: <span class="ticker-accent">INCOMING</span></span>
-      <span class="ticker-item">PRAYERS SENT: <span class="ticker-accent">UNANSWERED</span></span>
     </div>
   </div>
 
   <div class="hero">
-    <div class="hero-eyebrow">v2.0 — Clinical-Grade Assessment</div>
+    <div class="hero-eyebrow">Clinical-Grade Academic Assessment</div>
     <h1>
       HOW<br>
       <span class="line2">COOKED</span><br>
@@ -87,7 +92,7 @@
 
       <div class="result-placeholder" id="placeholder">
         <div class="placeholder-icon">🩺</div>
-        <p class="placeholder-text">Awaiting your terrible life choices...</p>
+        <p class="placeholder-text">Awaiting your terrible choices...</p>
       </div>
 
       <div class="result-content" id="resultContent">
@@ -110,24 +115,24 @@
     <div class="stats-strip" id="statsStrip" style="display:none;">
       <div class="stat-cell">
         <div class="stat-value" id="statSurvival">—</div>
-        <div class="stat-desc">Survival Odds</div>
+        <div class="stat-desc">Survival</div>
       </div>
       <div class="stat-cell">
         <div class="stat-value" id="statGrade">—</div>
-        <div class="stat-desc">Projected Grade</div>
+        <div class="stat-desc">Proj. Grade</div>
       </div>
       <div class="stat-cell">
         <div class="stat-value" id="statCope">—</div>
-        <div class="stat-desc">Cope Required</div>
+        <div class="stat-desc">Cope Lvl</div>
       </div>
       <div class="stat-cell">
         <div class="stat-value" id="statPrayer">—</div>
-        <div class="stat-desc">Prayers Needed</div>
+        <div class="stat-desc">Prayers</div>
       </div>
     </div>
 
     <div class="actions" id="actions">
-      <button class="action-btn" onclick="generateTombstone()">🪦 Generate Tombstone</button>
+      <button class="action-btn" onclick="generateTombstone()">🪦 Mint Tombstone</button>
       <button class="action-btn pill-btn hidden" id="copiumBtn" onclick="takeCopium()">💊 Delulu Pill</button>
     </div>
 
