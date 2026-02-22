@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>How Cooked Are You? 🔥</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>🔥 How Cooked Are You?</h1>
+
+  <input id="syllabus" type="number" placeholder="Syllabus Done %" />
+  <input id="days" type="number" placeholder="Days Left" />
+  <input id="sleep" type="number" placeholder="Sleep Hours" />
+  <input id="delusion" type="number" placeholder="Delusion Level (1-10)" />
+
+  <button onclick="calculate()">Calculate My Fate</button>
+
+  <div id="result"></div>
+</div>
+document.getElementById("result").innerHTML = `
+  <h2>${cooked}% Cooked 💀</h2>
+  <p><strong>Meme Verdict:</strong> ${verdict}</p>
+  <p><strong>AI Roast:</strong> ${roast}</p>
+  <p><strong>Survival Plan:</strong> ${plan}</p>
+`;
+
+<script src="script.js"></script>
+</body>
+</html>
