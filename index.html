@@ -134,6 +134,7 @@
     <div class="actions" id="actions">
       <button class="action-btn" onclick="generateTombstone()">🪦 Mint Tombstone</button>
       <button class="action-btn pill-btn hidden" id="copiumBtn" onclick="takeCopium()">💊 Delulu Pill</button>
+      <button class="action-btn" onclick="openShareModal()">📤 Share Result</button>
     </div>
 
   </div> </div> <div id="deluluModal" class="modal-overlay hidden" onclick="handleOverlayClick(event,'deluluModal')">
@@ -161,6 +162,22 @@
 </div>
 
 <canvas id="tombstoneCanvas" width="400" height="500" style="display:none;"></canvas>
+<!-- SHARE MODAL -->
+<div id="shareModal" class="modal-overlay hidden" onclick="handleOverlayClick(event,'shareModal')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('shareModal')">✕</button>
+    <span class="modal-icon">📤</span>
+    <h2 class="modal-title">Share Your Result</h2>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:20px;">
+      <button class="modal-btn" onclick="shareWhatsApp()">WhatsApp</button>
+      <button class="modal-btn" onclick="shareTwitter()">X</button>
+      <button class="modal-btn" onclick="shareFacebook()">Facebook</button>
+      <button class="modal-btn" onclick="shareInstagram()">Instagram</button>
+      <button class="modal-btn secondary" onclick="copyShareText()">Copy</button>
+    </div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
