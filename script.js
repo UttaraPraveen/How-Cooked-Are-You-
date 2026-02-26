@@ -305,3 +305,45 @@ function closeModal(id) {
 function handleOverlayClick(e, id) {
   if (e.target.id === id) closeModal(id);
 }
+// ============ SHARE SYSTEM ============
+
+function getShareText() {
+  const siteURL = "https://uttarapraveen.github.io/How-Cooked-Are-You-/";
+
+  return `I'm ${currentCookedLevel}% cooked 🔥💀
+
+Patient: ${studentNameGlobal}
+
+Try yours here:
+${siteURL}`;
+}
+
+function openShareModal() {
+  document.getElementById("shareModal").classList.remove("hidden");
+}
+
+function shareWhatsApp() {
+  const text = encodeURIComponent(getShareText());
+  window.open(`https://wa.me/?text=${text}`, "_blank");
+}
+
+function shareTwitter() {
+  const text = encodeURIComponent(getShareText());
+  window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+}
+
+function shareFacebook() {
+  const url = encodeURIComponent(window.location.href);
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
+}
+
+function shareInstagram() {
+  copyShareText();
+  alert("Result copied! Open Instagram and paste it in your story 😊");
+}
+
+function copyShareText() {
+  navigator.clipboard.writeText(getShareText())
+    .then(() => alert("Copied to clipboard!"))
+    .catch(() => alert("Could not copy automatically."));
+}
