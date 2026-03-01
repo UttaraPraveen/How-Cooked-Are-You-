@@ -95,6 +95,11 @@ function calculate() {
 
   const displayScore = Math.min(100, Math.max(0, Math.round(score)));
   currentCookedLevel = displayScore;
+  saveCookedScore(displayScore);
+
+displayCookedHistory();
+
+compareCookedScore(displayScore);
 
   // --- Update UI ---
   updateUI(displayScore, syllabus, days, sleep);
@@ -342,11 +347,89 @@ function shareInstagram() {
   alert("Result copied! Open Instagram and paste it in your story 😊");
 }
 
+
+
+// Compare with previous score
+// ============ SHARE SYSTEM ============
+
+
+
 function copyShareText() {
+
   navigator.clipboard.writeText(getShareText())
     .then(() => alert("Copied to clipboard!"))
     .catch(() => alert("Could not copy automatically."));
+
 }
+
+
+
+// ============ HISTORY FEATURE ============
+
+// Save Cooked Score
+function saveCookedScore(score) {
+
+  let history = JSON.parse(localStorage.getItem("cookedScoreHistory")) || [];
+
+  const entry = {
+    name: studentNameGlobal,
+    score: score,
+    date: new Date().toLocaleString()
+  };
+
+  history.push(entry);
+
+  localStorage.setItem("cookedScoreHistory", JSON.stringify(history));
+
+}
+
+
+// Display History
+function displayCookedHistory() {
+
+  const history = JSON.parse(localStorage.getItem("cookedScoreHistory")) || [];
+
+  const historyDiv = document.getElementById("history");
+
+  if (!historyDiv) return;
+
+  historyDiv.innerHTML = "<h3>📊 Score History</h3>";
+
+  history.slice().reverse().forEach(item => {
+
+    historyDiv.innerHTML += `
+      <p>
+      <strong>${item.name}</strong><br>
+      Cooked: ${item.score}%<br>
+      <small>${item.date}</small>
+      </p>
+    `;
+
+  });
+
+}
+
+
+// Compare Score
+function compareCookedScore(score) {
+
+  const history = JSON.parse(localStorage.getItem("cookedScoreHistory")) || [];
+
+  if (history.length < 2) return;
+
+  const previous = history[history.length - 2].score;
+
+  if (score > previous)
+
+    alert("⚠️ You are more cooked than last time!");
+
+  else if (score < previous)
+
+    alert("✅ Improvement! Less cooked than last time!");
+
+  else
+
+    alert("No change from previous score");
 
 function resetFields() {
   document.getElementById("studentName").value = "";
