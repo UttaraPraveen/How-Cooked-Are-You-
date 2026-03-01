@@ -347,3 +347,11 @@ function copyShareText() {
     .then(() => alert("Copied to clipboard!"))
     .catch(() => alert("Could not copy automatically."));
 }
+
+function resetFields() {
+  document.getElementById("studentName").value = "";
+  document.getElementById("syllabus").value = "";
+  document.getElementById("days").value = "";
+  document.getElementById("sleep").value = "";
+  document.getElementById("delusion").value = "";
+}
