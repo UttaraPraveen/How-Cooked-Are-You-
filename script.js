@@ -431,4 +431,10 @@ function compareCookedScore(score) {
 
     alert("No change from previous score");
 
+function resetFields() {
+  document.getElementById("studentName").value = "";
+  document.getElementById("syllabus").value = "";
+  document.getElementById("days").value = "";
+  document.getElementById("sleep").value = "";
+  document.getElementById("delusion").value = "";
 }
