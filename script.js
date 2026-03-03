@@ -67,28 +67,51 @@ function clamp(val, min, max) { return Math.min(max, Math.max(min, val)); }
 
 // ============ CALCULATE ============
 function calculate() {
+  // Clear old errors
+  document.querySelectorAll('.error-text').forEach(el => el.classList.remove('visible'));
+
+  let isValid = true;
+  const syllabusRaw = document.getElementById("syllabus").value;
+  const daysRaw = document.getElementById("days").value;
+  const sleepRaw = document.getElementById("sleep").value;
+  const delusionRaw = document.getElementById("delusion").value;
+
+  if (syllabusRaw === "") { document.getElementById("err-syllabus").textContent = "Required"; document.getElementById("err-syllabus").classList.add("visible"); isValid = false; }
+  else if (Number(syllabusRaw) < 0 || Number(syllabusRaw) > 100) { document.getElementById("err-syllabus").textContent = "Must be between 0 and 100"; document.getElementById("err-syllabus").classList.add("visible"); isValid = false; }
+
+  if (daysRaw === "") { document.getElementById("err-days").textContent = "Required"; document.getElementById("err-days").classList.add("visible"); isValid = false; }
+  else if (Number(daysRaw) < 0) { document.getElementById("err-days").textContent = "Must be 0 or more"; document.getElementById("err-days").classList.add("visible"); isValid = false; }
+
+  if (sleepRaw === "") { document.getElementById("err-sleep").textContent = "Required"; document.getElementById("err-sleep").classList.add("visible"); isValid = false; }
+  else if (Number(sleepRaw) < 0 || Number(sleepRaw) > 24) { document.getElementById("err-sleep").textContent = "Must be between 0 and 24"; document.getElementById("err-sleep").classList.add("visible"); isValid = false; }
+
+  if (delusionRaw === "") { document.getElementById("err-delusion").textContent = "Required"; document.getElementById("err-delusion").classList.add("visible"); isValid = false; }
+  else if (Number(delusionRaw) < 1 || Number(delusionRaw) > 10) { document.getElementById("err-delusion").textContent = "Must be between 1 and 10"; document.getElementById("err-delusion").classList.add("visible"); isValid = false; }
+
+  if (!isValid) return;
+
   const nameInput = document.getElementById("studentName").value.trim();
   studentNameGlobal = nameInput || "Academic Victim";
 
-  let syllabus = clamp(Number(document.getElementById("syllabus").value) || 0, 0, 100);
-  let days     = Math.max(Number(document.getElementById("days").value) || 0, 0);
-  let sleep    = clamp(Number(document.getElementById("sleep").value) || 7, 0, 24);
-  let delusion = clamp(Number(document.getElementById("delusion").value) || 5, 1, 10);
+  let syllabus = Number(syllabusRaw);
+  let days = Number(daysRaw);
+  let sleep = Number(sleepRaw);
+  let delusion = Number(delusionRaw);
 
   // --- Algorithm ---
   let baseCooked = 100 - syllabus;
   let timeMult = 1;
 
-  if (days === 0)       timeMult = 3.0;
-  else if (days <= 1)   timeMult = 2.5;
-  else if (days <= 3)   timeMult = 1.8;
-  else if (days <= 7)   timeMult = 1.2;
-  else if (days > 30)   timeMult = 0.5;
+  if (days === 0) timeMult = 3.0;
+  else if (days <= 1) timeMult = 2.5;
+  else if (days <= 3) timeMult = 1.8;
+  else if (days <= 7) timeMult = 1.2;
+  else if (days > 30) timeMult = 0.5;
 
   let score = baseCooked * timeMult;
 
-  if (sleep < 5)       score += (5 - sleep) * 8;
-  else if (sleep < 6)  score += (6 - sleep) * 4;
+  if (sleep < 5) score += (5 - sleep) * 8;
+  else if (sleep < 6) score += (6 - sleep) * 4;
 
   if (delusion > 6 && syllabus < 50) score += (delusion - 5) * 3;
   if (delusion === 10 && syllabus < 20) score += 15;
@@ -97,9 +120,9 @@ function calculate() {
   currentCookedLevel = displayScore;
   saveCookedScore(displayScore);
 
-displayCookedHistory();
+  displayCookedHistory();
 
-compareCookedScore(displayScore);
+  compareCookedScore(displayScore);
 
   // --- Update UI ---
   updateUI(displayScore, syllabus, days, sleep);
@@ -107,22 +130,22 @@ compareCookedScore(displayScore);
 
 function updateUI(displayScore, syllabus, days, sleep) {
   let roastPool;
-  if (displayScore < 15)       roastPool = ROASTS.ultraChill;
+  if (displayScore < 15) roastPool = ROASTS.ultraChill;
   else if (displayScore < 35) roastPool = ROASTS.chill;
   else if (displayScore < 60) roastPool = ROASTS.medium;
   else if (displayScore < 82) roastPool = ROASTS.highlyCooked;
-  else                        roastPool = ROASTS.burnt;
+  else roastPool = ROASTS.burnt;
 
   const roast = roastPool[Math.floor(Math.random() * roastPool.length)];
   const verdict = getVerdict(displayScore);
 
   let color, bgColor, borderColor;
   // Using generic vars that look good on both Light/Dark
-  if (displayScore < 20)      { color = '#059669'; bgColor = 'rgba(16, 185, 129, 0.1)'; borderColor = '#34d399'; }
+  if (displayScore < 20) { color = '#059669'; bgColor = 'rgba(16, 185, 129, 0.1)'; borderColor = '#34d399'; }
   else if (displayScore < 45) { color = '#d97706'; bgColor = 'rgba(251, 191, 36, 0.1)'; borderColor = '#fbbf24'; }
   else if (displayScore < 70) { color = '#ea580c'; bgColor = 'rgba(253, 186, 116, 0.1)'; borderColor = '#fdba74'; }
   else if (displayScore < 85) { color = '#dc2626'; bgColor = 'rgba(248, 113, 113, 0.1)'; borderColor = '#f87171'; }
-  else                        { color = '#be123c'; bgColor = 'rgba(251, 113, 133, 0.1)'; borderColor = '#fb7185'; }
+  else { color = '#be123c'; bgColor = 'rgba(251, 113, 133, 0.1)'; borderColor = '#fb7185'; }
 
   document.getElementById("placeholder").style.display = "none";
   const resultContent = document.getElementById("resultContent");
@@ -131,7 +154,7 @@ function updateUI(displayScore, syllabus, days, sleep) {
   const scoreEl = document.getElementById("scoreDisplay");
   scoreEl.style.color = color;
   scoreEl.innerHTML = `${displayScore}<span class="score-unit" style="color:var(--text); opacity:0.3;">%</span>`;
-  
+
   const fill = document.getElementById("flameFill");
   fill.style.width = '0%';
   fill.style.background = `linear-gradient(to right, ${borderColor}, ${color})`;
@@ -161,7 +184,7 @@ function updateStats(score, syllabus, days, sleep) {
   strip.style.animation = 'fadeUp 0.5s 0.2s ease both';
 
   const survival = Math.max(0, Math.round(100 - score * 0.85));
-  const grades = ['A+','A','B+','B','C+','C','D','F','F-'];
+  const grades = ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D', 'F', 'F-'];
   const gradeIdx = Math.min(8, Math.floor(score / 12));
   const copeLevel = score > 80 ? 'MAX' : score > 50 ? 'HIGH' : score > 25 ? 'MED' : 'LOW';
   const prayers = score > 85 ? '∞' : score > 60 ? '1000+' : score > 30 ? '100' : '12';
@@ -173,12 +196,12 @@ function updateStats(score, syllabus, days, sleep) {
 }
 
 function getVerdict(score) {
-  if (score < 10)  return { label: '✅ Not Cooked' };
-  if (score < 25)  return { label: '🧊 Chilling' };
-  if (score < 45)  return { label: '⚠️ Mildly Crispy' };
-  if (score < 65)  return { label: '🔥 Medium Rare' };
-  if (score < 82)  return { label: '💀 Well Done' };
-  return                  { label: '☠️ BURNT TOAST' };
+  if (score < 10) return { label: '✅ Not Cooked' };
+  if (score < 25) return { label: '🧊 Chilling' };
+  if (score < 45) return { label: '⚠️ Mildly Crispy' };
+  if (score < 65) return { label: '🔥 Medium Rare' };
+  if (score < 82) return { label: '💀 Well Done' };
+  return { label: '☠️ BURNT TOAST' };
 }
 
 function takeCopium() {
@@ -195,7 +218,7 @@ function generateTombstone() {
   const name = studentNameGlobal;
   const W = canvas.width, H = canvas.height;
   const theme = document.documentElement.getAttribute('data-theme') || 'light';
-  
+
   const isDark = theme === 'dark';
 
   // --- CONFIG ---
@@ -225,7 +248,7 @@ function generateTombstone() {
   stoneGrad.addColorStop(1, colors.stoneBot);
   ctx.fillStyle = stoneGrad;
   ctx.beginPath();
-  ctx.arc(W/2, 180, 150, Math.PI, 0);
+  ctx.arc(W / 2, 180, 150, Math.PI, 0);
   ctx.lineTo(W - 60, H - 40);
   ctx.lineTo(60, H - 40);
   ctx.closePath();
@@ -250,15 +273,15 @@ function generateTombstone() {
 
   ctx.font = "bold 42px 'Courier New'";
   ctx.fillStyle = colors.accent;
-  ctx.fillText("R.I.P", W/2, 115);
+  ctx.fillText("R.I.P", W / 2, 115);
 
   ctx.font = "bold 22px 'Courier New'";
   ctx.fillStyle = colors.textMain;
-  ctx.fillText(name.toUpperCase().substring(0, 14), W/2, 175);
+  ctx.fillText(name.toUpperCase().substring(0, 14), W / 2, 175);
 
   ctx.font = "16px 'Courier New'";
   ctx.fillStyle = colors.textSub;
-  ctx.fillText(new Date().toLocaleDateString('en-GB'), W/2, 210);
+  ctx.fillText(new Date().toLocaleDateString('en-GB'), W / 2, 210);
 
   // Divider
   ctx.strokeStyle = colors.stroke;
@@ -270,25 +293,25 @@ function generateTombstone() {
 
   ctx.font = "italic 15px 'Courier New'";
   ctx.fillStyle = colors.textSub;
-  ctx.fillText("Cause of Death:", W/2, 260);
+  ctx.fillText("Cause of Death:", W / 2, 260);
 
   let cause = "Academic Negligence";
-  if      (currentCookedLevel >= 95) cause = "0% Syllabus, 100% Cope";
+  if (currentCookedLevel >= 95) cause = "0% Syllabus, 100% Cope";
   else if (currentCookedLevel >= 85) cause = "Procrastination Overdose";
   else if (currentCookedLevel >= 70) cause = "Delusional Optimism";
   else if (currentCookedLevel >= 50) cause = "Peak Mid-Semester Chaos";
-  else if (currentCookedLevel < 20)  cause = "Studied Too Hard (Sad)";
+  else if (currentCookedLevel < 20) cause = "Studied Too Hard (Sad)";
 
   ctx.font = "bold 16px 'Courier New'";
   ctx.fillStyle = colors.accent;
-  ctx.fillText(cause, W/2, 290);
+  ctx.fillText(cause, W / 2, 290);
 
   ctx.font = "30px serif";
-  ctx.fillText("🔥", W/2, 360);
+  ctx.fillText("🔥", W / 2, 360);
 
   ctx.font = "bold 15px 'Courier New'";
   ctx.fillStyle = colors.accent;
-  ctx.fillText(`COOKED: ${currentCookedLevel}%`, W/2, 400);
+  ctx.fillText(`COOKED: ${currentCookedLevel}%`, W / 2, 400);
 
   ctx.shadowBlur = 0;
 
@@ -298,7 +321,7 @@ function generateTombstone() {
 
 function downloadImage() {
   const link = document.createElement('a');
-  link.download = `RIP-${studentNameGlobal.replace(/\s+/g,'-')}.png`;
+  link.download = `RIP-${studentNameGlobal.replace(/\s+/g, '-')}.png`;
   link.href = document.getElementById("tombstoneCanvas").toDataURL();
   link.click();
 }
@@ -420,16 +443,12 @@ function compareCookedScore(score) {
   const previous = history[history.length - 2].score;
 
   if (score > previous)
-
     alert("⚠️ You are more cooked than last time!");
-
   else if (score < previous)
-
     alert("✅ Improvement! Less cooked than last time!");
-
   else
-
     alert("No change from previous score");
+} // ← closes compareCookedScore()
 
 function resetFields() {
   document.getElementById("studentName").value = "";

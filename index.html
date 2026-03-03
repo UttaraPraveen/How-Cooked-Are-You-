@@ -67,18 +67,22 @@
         <div class="form-group">
           <label>Syllabus Done %</label>
           <input id="syllabus" type="number" placeholder="0" min="0" max="100" />
+          <span class="error-text" id="err-syllabus"></span>
         </div>
         <div class="form-group">
           <label>Days Until Exam</label>
           <input id="days" type="number" placeholder="1" min="0" />
+          <span class="error-text" id="err-days"></span>
         </div>
         <div class="form-group">
           <label>Sleep (hrs/night)</label>
           <input id="sleep" type="number" placeholder="6" min="0" max="24" />
+          <span class="error-text" id="err-sleep"></span>
         </div>
         <div class="form-group">
           <label>Delusion Level (1–10)</label>
           <input id="delusion" type="number" placeholder="8" min="1" max="10" />
+          <span class="error-text" id="err-delusion"></span>
         </div>
       </div>
       <button class="submit-btn" onclick="calculate()">

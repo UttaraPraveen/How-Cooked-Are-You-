@@ -173,6 +173,18 @@ input:focus {
   box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.15);
 }
 
+.error-text {
+  color: var(--accent);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  margin-top: -4px;
+  display: none;
+}
+.error-text.visible {
+  display: block;
+  animation: fadeIn 0.2s;
+}
+
 /* ---- Submit Button ---- */
 .submit-btn {
   width: 100%; margin-top: 24px; padding: 18px 24px;
