@@ -15,13 +15,13 @@ Click the Fork button at the top right of this repo.
 2️⃣ Clone Your Fork
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/imposter-game.git
+git clone https://github.com/YOUR-USERNAME/How-Cooked-Are-You-.git
 ```
 
 3️⃣ Create a New Branch
 
 ```bash
-git checkout -b feature/your-feature-name`
+git checkout -b feature/your-feature-name
 ```
 
 4️⃣ Make Your Changes
@@ -43,7 +43,7 @@ git commit -m "feat: add new feature"
 6️⃣ Push to GitHub
 
 ```bash
-git push origin feature/your-feature-name`
+git push origin feature/your-feature-name
 ```
 
 7️⃣ Open a Pull Request
