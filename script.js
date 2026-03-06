@@ -67,6 +67,7 @@ function clamp(val, min, max) { return Math.min(max, Math.max(min, val)); }
 
 // ============ CALCULATE ============
 function calculate() {
+<<<<<<< HEAD
   // Clear old errors
   document.querySelectorAll('.error-text').forEach(el => el.classList.remove('visible'));
 
@@ -97,6 +98,15 @@ function calculate() {
   let days = Number(daysRaw);
   let sleep = Number(sleepRaw);
   let delusion = Number(delusionRaw);
+=======
+  const nameInput = document.getElementById("studentName").value.trim();
+  studentNameGlobal = nameInput || "Academic Victim";
+
+  let syllabus = clamp(Number(document.getElementById("syllabus").value) || 0, 0, 100);
+  let days = Math.max(Number(document.getElementById("days").value) || 0, 0);
+  let sleep = clamp(Number(document.getElementById("sleep").value) || 7, 0, 24);
+  let delusion = clamp(Number(document.getElementById("delusion").value) || 5, 1, 10);
+>>>>>>> origin/main
 
   // --- Algorithm ---
   let baseCooked = 100 - syllabus;
