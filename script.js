@@ -67,6 +67,38 @@ function clamp(val, min, max) { return Math.min(max, Math.max(min, val)); }
 
 // ============ CALCULATE ============
 function calculate() {
+<<<<<<< HEAD
+  // Clear old errors
+  document.querySelectorAll('.error-text').forEach(el => el.classList.remove('visible'));
+
+  let isValid = true;
+  const syllabusRaw = document.getElementById("syllabus").value;
+  const daysRaw = document.getElementById("days").value;
+  const sleepRaw = document.getElementById("sleep").value;
+  const delusionRaw = document.getElementById("delusion").value;
+
+  if (syllabusRaw === "") { document.getElementById("err-syllabus").textContent = "Required"; document.getElementById("err-syllabus").classList.add("visible"); isValid = false; }
+  else if (Number(syllabusRaw) < 0 || Number(syllabusRaw) > 100) { document.getElementById("err-syllabus").textContent = "Must be between 0 and 100"; document.getElementById("err-syllabus").classList.add("visible"); isValid = false; }
+
+  if (daysRaw === "") { document.getElementById("err-days").textContent = "Required"; document.getElementById("err-days").classList.add("visible"); isValid = false; }
+  else if (Number(daysRaw) < 0) { document.getElementById("err-days").textContent = "Must be 0 or more"; document.getElementById("err-days").classList.add("visible"); isValid = false; }
+
+  if (sleepRaw === "") { document.getElementById("err-sleep").textContent = "Required"; document.getElementById("err-sleep").classList.add("visible"); isValid = false; }
+  else if (Number(sleepRaw) < 0 || Number(sleepRaw) > 24) { document.getElementById("err-sleep").textContent = "Must be between 0 and 24"; document.getElementById("err-sleep").classList.add("visible"); isValid = false; }
+
+  if (delusionRaw === "") { document.getElementById("err-delusion").textContent = "Required"; document.getElementById("err-delusion").classList.add("visible"); isValid = false; }
+  else if (Number(delusionRaw) < 1 || Number(delusionRaw) > 10) { document.getElementById("err-delusion").textContent = "Must be between 1 and 10"; document.getElementById("err-delusion").classList.add("visible"); isValid = false; }
+
+  if (!isValid) return;
+
+  const nameInput = document.getElementById("studentName").value.trim();
+  studentNameGlobal = nameInput || "Academic Victim";
+
+  let syllabus = Number(syllabusRaw);
+  let days = Number(daysRaw);
+  let sleep = Number(sleepRaw);
+  let delusion = Number(delusionRaw);
+=======
   const nameInput = document.getElementById("studentName").value.trim();
   studentNameGlobal = nameInput || "Academic Victim";
 
@@ -74,6 +106,7 @@ function calculate() {
   let days = Math.max(Number(document.getElementById("days").value) || 0, 0);
   let sleep = clamp(Number(document.getElementById("sleep").value) || 7, 0, 24);
   let delusion = clamp(Number(document.getElementById("delusion").value) || 5, 1, 10);
+>>>>>>> origin/main
 
   // --- Algorithm ---
   let baseCooked = 100 - syllabus;
