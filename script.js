@@ -285,9 +285,21 @@ function generateTombstone() {
   ctx.fillStyle = colors.accent;
   ctx.fillText("R.I.P", W / 2, 115);
 
+<<<<<<< HEAD
+  let fontSize = 22;
+  ctx.font = `bold ${fontSize}px 'Courier New'`;
+  let studentNameText = name.toUpperCase();
+  while (ctx.measureText(studentNameText).width > 260 && fontSize > 10) {
+    fontSize--;
+    ctx.font = `bold ${fontSize}px 'Courier New'`;
+  }
+  ctx.fillStyle = colors.textMain;
+  ctx.fillText(studentNameText, W / 2, 175);
+=======
   ctx.font = "bold 22px 'Courier New'";
   ctx.fillStyle = colors.textMain;
   ctx.fillText(name.toUpperCase().substring(0, 14), W / 2, 175);
+>>>>>>> origin/main
 
   ctx.font = "16px 'Courier New'";
   ctx.fillStyle = colors.textSub;
