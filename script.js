@@ -49,6 +49,18 @@ const COPIUM_QUOTES = [
 let currentCookedLevel = 0;
 let studentNameGlobal = "Academic Victim";
 
+// ============ THEME TOGGLE ============
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
 
 // ============ UTILS ============
 function clamp(val, min, max) { return Math.min(max, Math.max(min, val)); }
